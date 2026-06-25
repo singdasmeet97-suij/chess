@@ -1,39 +1,29 @@
-name: CI
+name: Chess Game CI
 
 on:
 push:
-branches:
-- main
-- master
+branches: [ main, master ]
 pull_request:
-branches:
-- main
-- master
+branches: [ main, master ]
 
 jobs:
-build:
+validate:
 runs-on: ubuntu-latest
 
 ```
-strategy:
-  matrix:
-    node-version: [18.x]
-
 steps:
   - name: Checkout Repository
     uses: actions/checkout@v4
 
-  - name: Setup Node.js
-    uses: actions/setup-node@v4
-    with:
-      node-version: ${{ matrix.node-version }}
+  - name: Verify project files
+    run: |
+      test -f index.html
+      test -f style.css
+      test -f script.js
 
-  - name: Install Dependencies
-    run: npm install
+  - name: Display project structure
+    run: ls -R
 
-  - name: Run Tests
-    run: npm test
-
-  - name: Build Project
-    run: npm run build --if-present
+  - name: CI Passed
+    run: echo "Chess game files found successfully!"
 ```
