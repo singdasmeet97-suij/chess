@@ -1,29 +1,27 @@
 name: Chess Game CI
 
 on:
-push:
-branches: [ main, master ]
-pull_request:
-branches: [ main, master ]
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
 
 jobs:
-validate:
-runs-on: ubuntu-latest
+  validate:
+    runs-on: ubuntu-latest
 
-```
-steps:
-  - name: Checkout Repository
-    uses: actions/checkout@v4
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-  - name: Verify project files
-    run: |
-      test -f index.html
-      test -f style.css
-      test -f script.js
+      - name: Verify project files
+        run: |
+          test -f index.html
+          test -f style.css
+          test -f script.js
 
-  - name: Display project structure
-    run: ls -R
+      - name: Display project structure
+        run: ls -R
 
-  - name: CI Passed
-    run: echo "Chess game files found successfully!"
-```
+      - name: CI Passed
+        run: echo "Chess game files found successfully!"
