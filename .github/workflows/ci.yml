@@ -1,4 +1,4 @@
-name: Chess Game CI
+name: Chess Game CI/CD
 
 on:
   push:
@@ -6,8 +6,22 @@ on:
   pull_request:
     branches: [ main, master ]
 
+# Grant permissions required for deploying to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Prevent concurrent deployments from colliding
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
 jobs:
-  validate:
+  validate_and_deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
 
     steps:
@@ -20,8 +34,13 @@ jobs:
           test -f style.css
           test -f script.js
 
-      - name: Display project structure
-        run: ls -R
+      # NEW: Upload your game files to GitHub Pages
+      - name: Upload Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.' # Uploads everything in the root directory
 
-      - name: CI Passed
-        run: echo "Chess game files found successfully!"
+      # NEW: Deploy the uploaded files to create the live link
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
